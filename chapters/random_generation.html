@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>GD benchmark sets – random_generation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#random-generation" id="toc-random-generation" class="nav-link active" data-scroll-target="#random-generation"><span class="header-section-number">1</span> Random generation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="random-generation" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="random-generation"><span class="header-section-number">1</span> Random generation</h2>
+<p>We discussed above that in a few cases, authors have generated their own datasets to test their algorithms. We call these generated datasets <em>synthetic</em> or <em>custom</em>, as opposed to datasets found in the wild. Generating a synthetic dataset can be essential for several reasons, particularly in the context of algorithm development and validation:</p>
+<ul>
+<li><strong>Privacy and Publication Constraints:</strong> Imagine you’ve created an innovative algorithm using a dataset that, due to privacy concerns, cannot be shared publicly. To validate and share your work without compromising data confidentiality, creating a synthetic dataset that mirrors the essential features of the original data allows you to showcase your algorithm’s effectiveness while adhering to privacy restrictions.</li>
+<li><strong>Benchmarking and Comparative Analysis:</strong> Suppose you have access to a single dataset that can be shared and wish to prove your algorithm’s robustness across various scenarios. Generating synthetic datasets with <em>comparable</em> characteristics provides a controlled environment to conduct benchmark studies. This approach enables scientists to demonstrate that your algorithm performs consistently well across datasets with analogous features, thereby reinforcing its applicability and reliability.</li>
+<li><strong>Addressing Data Availability Issues:</strong> In certain situations, you might design an algorithm to process graphs with specific attributes only to discover the absence of publicly available datasets showcasing these features. Synthetic datasets become invaluable here, allowing you to create tailored data that incorporates the necessary characteristics. This approach not only facilitates the testing of your algorithm in a relevant context but also helps in illustrating its potential in hypothetical yet plausible scenarios.</li>
+</ul>
+<p>We use the word <em>synthetic</em> too in cases where the dataset has been altered, sliced, or other modifications have been applied to it.</p>
+<p>The following is a practical example of a case where you would need to edit a network:</p>
+<p>Imagine you are building a visualization to deal with the entirety of the <a href="https://en.wikipedia.org/wiki/Enron_Corpus">Enron Corpus</a> dataset , which has hundreds of thousands of nodes and edges. Because of its size, you decide to <em>slice up</em> the large dataset in many smaller files, so you can run tests. This particular dataset, in addition to being a challenging problem because of its size, also has an interesting distribution of connection densities: some nodes are extremely well connected, while others are much less connected. Indeed, the dataset is comprised of a collection of emails sent by Enron executives - between themselves or between other employees of the company. Because of how the dataset is constructed - where only the emails from the executives are taken into account - it has a distinctive skew in the connectedness of the data: 158 nodes are extremely well connected, while the rest of the nodes are much less connected. Because of this, there’s uncountable mistakes that can be done through slicing this graph: for instance, slicing it so that the subset includes a less dense section of the entire graph will fail to provide a representative section.</p>
+<p>While the creation of a synthetic dataset is a perfectly viable way to produce a benchmark set, in addition to replicability criteria (as discussed above), we also have to pay particular attention to a number of statistics related to the structure of graphs — both when generating new datasets, and when slicing up existing datasets to reduce their size, or to create more graphs from a single, larger graph.</p>
+<p>The list of features to take into account to claim that a synthetic graph is <em>comparable</em> to another one would be long, and perhaps out of the scope of this publication. These are just a few examples of what could be relevant:</p>
+<ul>
+<li><strong>Size (nodes, edges):</strong> The total number of nodes and edges in the graph, indicating its overall scale.</li>
+<li><strong>Diameter:</strong> The longest shortest path between any two nodes, showing the graph’s maximum extent.</li>
+<li><strong>Density:</strong> The ratio of existing edges to possible edges, reflecting how closely knit the graph is.</li>
+<li><strong>Motifs:</strong> Recurring, significant subgraphs; identify which motifs occur more or less frequently than expected.</li>
+<li><strong>Connectedness:</strong> Evaluates both the number and sizes of graph components, along with detailed analysis per component.</li>
+<li><strong>Centrality Measures (betweenness, closeness, degree):</strong> Quantify the importance of nodes based on their position and connections within the graph.</li>
+<li><strong>Special Cases:</strong>
+<ul>
+<li><strong>Layers:</strong> Characteristics like number of layers, nodes per layer, and inter-layer connections.</li>
+<li><strong>Disjoint Groups:</strong> The count and size distribution of separate clusters, plus an analysis of each group’s properties.</li>
+<li><strong>Overlapping Sets:</strong> Number and size distribution of intersecting groups, along with detailed features.</li>
+<li><strong>Additional Node/Edge Data:</strong> Information such as timestamps, attributes, or weights that add context to nodes/edges.</li>
+<li><strong>Dynamic:</strong> Describes changes in the graph over time, including the nature and frequency of node/edge modifications.</li>
+</ul></li>
+</ul>
+<p>The generation of random graphs that accurately mimic specific features presents a complex challenge, that has been explored abundantly in the past, but has found no universal solution yet. Two examples of popular models used to generate synthetic datasets are the Erdős-Rényi (ER) and the Barabási-Albert (BA) models, each one with their distinct focus and limitations:</p>
+<p>The ER model excels in creating graphs with uniform edge distribution, ideal for testing an algorithm’s ability to evenly space nodes and reduce edge crossings. However, it falls short in replicating the complex, non-uniform connections seen in real-world networks, limiting its applicability to scenarios requiring simplicity and randomness. Conversely, the BA model produces scale-free networks with a few highly connected nodes, reflecting the hierarchical structure of many natural and human-made systems. It challenges layout algorithms to effectively display these hubs without cluttering. The limitation here is its focus on growth and preferential attachment, which might not suit all types of networks, particularly those without clear hub structures.</p>
+<p>As there is no universal solution for random graph generation, <em>our recommendation</em> is to try as much as possible to pay attention to research replicability criteria, such as redistributing the generated dataset as supplemental material in the paper.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
