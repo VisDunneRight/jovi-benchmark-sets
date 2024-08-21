@@ -208,9 +208,6 @@ Tag-filtered Navigation
 <div id="Control_Flow_Graphs-link">
 <a href="#Control_Flow_Graphs" class="dataset-link">Control Flow Graphs</a>
 </div>
-<div id="Debates-link">
-<a href="#Debates" class="dataset-link">Debates</a>
-</div>
 <div id="Enron-link">
 <a href="#Enron" class="dataset-link">Enron</a>
 </div>
@@ -259,9 +256,6 @@ Tag-filtered Navigation
 <div id="Pajek-link">
 <a href="#Pajek" class="dataset-link">Pajek</a>
 </div>
-<div id="Pert_DAG-link">
-<a href="#Pert_DAG" class="dataset-link">Pert DAG</a>
-</div>
 <div id="Protein_Interactions_Publications-link">
 <a href="#Protein_Interactions_Publications" class="dataset-link">Protein Interactions (Publications)</a>
 </div>
@@ -291,9 +285,6 @@ Tag-filtered Navigation
 </div>
 <div id="SuiteSparse_Matrix_Collection-link">
 <a href="#SuiteSparse_Matrix_Collection" class="dataset-link">SuiteSparse Matrix Collection</a>
-</div>
-<div id="Toblers_Flow_Mapper-link">
-<a href="#Toblers_Flow_Mapper" class="dataset-link">Tobler’s Flow Mapper</a>
 </div>
 <div id="Transportation_Networks-link">
 <a href="#Transportation_Networks" class="dataset-link">Transportation Networks</a>
@@ -746,7 +737,6 @@ Tag-filtered Navigation
 <div id="eades1984-link">
 <span class="citation" data-cites="eades1984">[@eades1984]</span>
 </div>
-<!-- <div id="elassady2017-link">[@elassady2017]</div> -->
 <div id="felice2019-link">
 <span class="citation" data-cites="felice2019">[@felice2019]</span>
 </div>
@@ -899,333 +889,333 @@ Tag-filtered Navigation
 </div>
 </div>
 <div class="cell hidden">
-<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="277" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 276;"><span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(benchmark_datasets)</span></span>
-<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>    <span class="co">// sorry for all the vars instead of let but this was split before into different cells</span></span>
-<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniqueDataTagSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span> <span class="co">// set for the tags</span></span>
-<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniquePaperTagSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
-<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> dataSetNames <span class="op">=</span> []<span class="op">;</span> <span class="co">// list of names of datasets</span></span>
-<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperNames <span class="op">=</span> []</span>
-<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> dataMap <span class="op">=</span> {} <span class="co">// maps from the tags to the individual datasets</span></span>
-<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperMap <span class="op">=</span> {} <span class="co">// maps from the tags to the individual papers</span></span>
-<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> nameMap <span class="op">=</span> {} <span class="co">// maps from the cleaned name to the actual name containing potentially special characters</span></span>
-<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(literature)</span></span>
-<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>    <span class="co">// "Citation name": "bekos2022"</span></span>
-<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>    <span class="co">// "Graph feature": "hypergraphs, spatial"</span></span>
-<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> tagMapping <span class="op">=</span> {</span>
-<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hypergraphs"</span><span class="op">:</span> <span class="st">"Hypergraphs"</span><span class="op">,</span></span>
-<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spatial"</span><span class="op">:</span> <span class="st">"Spatial"</span><span class="op">,</span></span>
-<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>    <span class="st">"layered graphs"</span><span class="op">:</span> <span class="st">"N-layers"</span><span class="op">,</span></span>
-<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>    <span class="st">"generic"</span><span class="op">:</span> <span class="st">"Generic"</span><span class="op">,</span></span>
-<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>    <span class="st">"large"</span><span class="op">:</span> <span class="st">"Large"</span><span class="op">,</span></span>
-<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic (discrete)"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
-<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
-<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic (continuous)"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
-<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>    <span class="st">"clusters (generated)"</span><span class="op">:</span> <span class="st">"Clusters (generated)"</span><span class="op">,</span></span>
-<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>    <span class="st">"clusters (pre-existing)"</span><span class="op">:</span> <span class="st">"Clusters (pre-existing)"</span><span class="op">,</span></span>
-<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bundled edges (generated)"</span><span class="op">:</span> <span class="st">"Bundled edges (generated)"</span><span class="op">,</span></span>
-<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>    <span class="st">"directed edges"</span><span class="op">:</span> <span class="st">"Directed edges"</span><span class="op">,</span></span>
-<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weighted edges"</span><span class="op">:</span> <span class="st">"Weighted edges"</span><span class="op">,</span></span>
-<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weighted nodes"</span><span class="op">:</span> <span class="st">"Weighted nodes"</span><span class="op">,</span></span>
-<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hierarchical"</span><span class="op">:</span> <span class="st">"Hierarchical"</span><span class="op">,</span></span>
-<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>    <span class="st">"categorical nodes"</span><span class="op">:</span> <span class="st">"Categorical nodes"</span><span class="op">,</span></span>
-<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>    <span class="st">"trees"</span><span class="op">:</span> <span class="st">"Trees"</span><span class="op">,</span></span>
-<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>    <span class="st">"labeled nodes"</span><span class="op">:</span> <span class="st">"Labeled nodes"</span><span class="op">,</span></span>
-<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bipartite"</span><span class="op">:</span> <span class="st">"Bipartite"</span><span class="op">,</span></span>
-<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tripartite"</span><span class="op">:</span> <span class="st">"Bipartite"</span><span class="op">,</span></span>
-<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>    <span class="st">"labeled edges"</span><span class="op">:</span> <span class="st">"Labeled edges"</span><span class="op">,</span></span>
-<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>    <span class="st">"planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
-<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sparse"</span><span class="op">:</span> <span class="st">"Sparse"</span><span class="op">,</span></span>
-<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>    <span class="st">"K-planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
-<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2-planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
-<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>    <span class="st">"acyclic"</span><span class="op">:</span> <span class="st">"Acyclic"</span><span class="op">,</span></span>
-<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
-<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>    benchmark_datasets<span class="op">.</span><span class="fu">forEach</span>((entry) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> name <span class="op">=</span> <span class="fu">name_cleanup</span>(entry<span class="op">.</span><span class="at">Name</span>)</span>
-<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>        nameMap[name] <span class="op">=</span> entry<span class="op">.</span><span class="at">Name</span></span>
-<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>        dataSetNames<span class="op">.</span><span class="fu">push</span>(name)<span class="op">;</span></span>
-<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> parts <span class="op">=</span> entry[<span class="st">"graph features handled"</span>]<span class="op">.</span><span class="fu">split</span>(<span class="st">","</span>)<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> item<span class="op">.</span><span class="fu">trim</span>())</span>
-<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (<span class="kw">var</span> part <span class="kw">of</span> parts) {</span>
-<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (part <span class="op">!==</span> <span class="st">""</span>) {</span>
-<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>                uniqueDataTagSet<span class="op">.</span><span class="fu">add</span>(part)<span class="op">;</span></span>
-<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="op">!</span>dataMap[part]) {</span>
-<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>                    dataMap[part] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
-<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>                }</span>
-<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>                dataMap[part]<span class="op">.</span><span class="fu">add</span>(name)<span class="op">;</span></span>
-<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>    literature<span class="op">.</span><span class="fu">forEach</span>((paper) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>      paperNames<span class="op">.</span><span class="fu">push</span>(paper[<span class="st">"Citation name"</span>])<span class="op">;</span></span>
-<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>      <span class="kw">var</span> parts <span class="op">=</span> paper[<span class="st">"Graph feature"</span>]<span class="op">.</span><span class="fu">split</span>(<span class="st">","</span>)<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> item<span class="op">.</span><span class="fu">trim</span>())</span>
-<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">var</span> part <span class="kw">of</span> parts) {</span>
-<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (part <span class="op">!==</span> <span class="st">""</span>) {</span>
-<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>          uniquePaperTagSet<span class="op">.</span><span class="fu">add</span>(part)<span class="op">;</span></span>
-<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>          </span>
-<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (part <span class="kw">in</span> tagMapping) {</span>
-<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>              part <span class="op">=</span> tagMapping[part]</span>
-<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="op">!</span>paperMap[part]) {</span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>              paperMap[part] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
-<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>          </span>
-<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>          paperMap[part]<span class="op">.</span><span class="fu">add</span>(paper[<span class="st">"Citation name"</span>])<span class="op">;</span></span>
-<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Add keys not present in the paperTags </span></span>
-<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(dataMap)<span class="op">.</span><span class="fu">forEach</span>((key) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>paperMap[key]) {</span>
-<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>        paperMap[key] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
-<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> category_tags <span class="op">=</span> {</span>
-<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span><span class="op">:</span> <span class="st">"Layered"</span><span class="op">,</span></span>
-<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>        <span class="dv">2</span><span class="op">:</span> <span class="st">"Hierarchical"</span><span class="op">,</span></span>
-<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4</span><span class="op">:</span> <span class="st">"Attributes"</span><span class="op">,</span></span>
-<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>        <span class="dv">11</span><span class="op">:</span> <span class="st">"Structures"</span><span class="op">,</span></span>
-<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>        <span class="dv">21</span><span class="op">:</span> <span class="st">"Other"</span><span class="op">,</span></span>
-<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>    <span class="co">// if you change this ordering or move around values also change the category map above!!!</span></span>
-<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>    <span class="co">//var uniqueDataTags = [...uniqueDataTagSet]</span></span>
-<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniqueDataTags <span class="op">=</span> [</span>
-<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Layered</span></span>
-<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Bipartite"</span><span class="op">,</span></span>
-<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>        <span class="st">"N-layers"</span><span class="op">,</span></span>
-<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Hierarchical</span></span>
-<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Trees"</span><span class="op">,</span></span>
-<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Hierarchical"</span><span class="op">,</span></span>
-<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Attributes</span></span>
-<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Dynamic"</span><span class="op">,</span></span>
-<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Weighted edges"</span><span class="op">,</span></span>
-<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Weighted nodes"</span><span class="op">,</span></span>
-<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Labeled nodes"</span><span class="op">,</span></span>
-<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Categorical nodes"</span><span class="op">,</span></span>
-<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Signed"</span><span class="op">,</span></span>
-<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Spatial"</span><span class="op">,</span></span>
-<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Structures</span></span>
-<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Clusters (pre-existing)"</span><span class="op">,</span></span>
-<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Clusters (generated)"</span><span class="op">,</span></span>
-<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Directed edges"</span><span class="op">,</span></span>
-<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Hypergraphs"</span><span class="op">,</span></span>
-<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Bundled edges (generated)"</span><span class="op">,</span></span>
-<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Partition"</span><span class="op">,</span></span>
-<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Multigraph"</span><span class="op">,</span></span>
-<span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Acyclic"</span><span class="op">,</span></span>
-<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mesh"</span><span class="op">,</span></span>
-<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Other</span></span>
-<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Generic"</span><span class="op">,</span></span>
-<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Planar"</span><span class="op">,</span></span>
-<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Nonplanar"</span><span class="op">,</span></span>
-<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Known crossing number"</span><span class="op">,</span></span>
-<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Large"</span><span class="op">,</span></span>
-<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Dense"</span><span class="op">,</span></span>
-<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Sparse"</span><span class="op">,</span></span>
-<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniquePaperTags <span class="op">=</span> [<span class="op">...</span>uniquePaperTagSet]  </span>
-<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(uniqueDataTags)</span></span>
-<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(uniquePaperTagSet)</span></span>
-<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(dataMap)</span></span>
-<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(paperMap)</span></span>
-<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(dataSetNames)</span></span>
-<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(paperNames)</span></span>
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="273" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 272;"><span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(benchmark_datasets)</span></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>    <span class="co">// sorry for all the vars instead of let but this was split before into different cells</span></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniqueDataTagSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span> <span class="co">// set for the tags</span></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniquePaperTagSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> dataSetNames <span class="op">=</span> []<span class="op">;</span> <span class="co">// list of names of datasets</span></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperNames <span class="op">=</span> []</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> dataMap <span class="op">=</span> {} <span class="co">// maps from the tags to the individual datasets</span></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperMap <span class="op">=</span> {} <span class="co">// maps from the tags to the individual papers</span></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> nameMap <span class="op">=</span> {} <span class="co">// maps from the cleaned name to the actual name containing potentially special characters</span></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(literature)</span></span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>    <span class="co">// "Citation name": "bekos2022"</span></span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>    <span class="co">// "Graph feature": "hypergraphs, spatial"</span></span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> tagMapping <span class="op">=</span> {</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hypergraphs"</span><span class="op">:</span> <span class="st">"Hypergraphs"</span><span class="op">,</span></span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spatial"</span><span class="op">:</span> <span class="st">"Spatial"</span><span class="op">,</span></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>    <span class="st">"layered graphs"</span><span class="op">:</span> <span class="st">"N-layers"</span><span class="op">,</span></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>    <span class="st">"generic"</span><span class="op">:</span> <span class="st">"Generic"</span><span class="op">,</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>    <span class="st">"large"</span><span class="op">:</span> <span class="st">"Large"</span><span class="op">,</span></span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic (discrete)"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dynamic (continuous)"</span><span class="op">:</span> <span class="st">"Dynamic"</span><span class="op">,</span></span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>    <span class="st">"clusters (generated)"</span><span class="op">:</span> <span class="st">"Clusters (generated)"</span><span class="op">,</span></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>    <span class="st">"clusters (pre-existing)"</span><span class="op">:</span> <span class="st">"Clusters (pre-existing)"</span><span class="op">,</span></span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bundled edges (generated)"</span><span class="op">:</span> <span class="st">"Bundled edges (generated)"</span><span class="op">,</span></span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>    <span class="st">"directed edges"</span><span class="op">:</span> <span class="st">"Directed edges"</span><span class="op">,</span></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weighted edges"</span><span class="op">:</span> <span class="st">"Weighted edges"</span><span class="op">,</span></span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weighted nodes"</span><span class="op">:</span> <span class="st">"Weighted nodes"</span><span class="op">,</span></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hierarchical"</span><span class="op">:</span> <span class="st">"Hierarchical"</span><span class="op">,</span></span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>    <span class="st">"categorical nodes"</span><span class="op">:</span> <span class="st">"Categorical nodes"</span><span class="op">,</span></span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>    <span class="st">"trees"</span><span class="op">:</span> <span class="st">"Trees"</span><span class="op">,</span></span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>    <span class="st">"labeled nodes"</span><span class="op">:</span> <span class="st">"Labeled nodes"</span><span class="op">,</span></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bipartite"</span><span class="op">:</span> <span class="st">"Bipartite"</span><span class="op">,</span></span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tripartite"</span><span class="op">:</span> <span class="st">"Bipartite"</span><span class="op">,</span></span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>    <span class="st">"labeled edges"</span><span class="op">:</span> <span class="st">"Labeled edges"</span><span class="op">,</span></span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>    <span class="st">"planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sparse"</span><span class="op">:</span> <span class="st">"Sparse"</span><span class="op">,</span></span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>    <span class="st">"K-planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2-planar"</span><span class="op">:</span> <span class="st">"Planar"</span><span class="op">,</span></span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>    <span class="st">"acyclic"</span><span class="op">:</span> <span class="st">"Acyclic"</span><span class="op">,</span></span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>    benchmark_datasets<span class="op">.</span><span class="fu">forEach</span>((entry) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> name <span class="op">=</span> <span class="fu">name_cleanup</span>(entry<span class="op">.</span><span class="at">Name</span>)</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>        nameMap[name] <span class="op">=</span> entry<span class="op">.</span><span class="at">Name</span></span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>        dataSetNames<span class="op">.</span><span class="fu">push</span>(name)<span class="op">;</span></span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> parts <span class="op">=</span> entry[<span class="st">"graph features handled"</span>]<span class="op">.</span><span class="fu">split</span>(<span class="st">","</span>)<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> item<span class="op">.</span><span class="fu">trim</span>())</span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (<span class="kw">var</span> part <span class="kw">of</span> parts) {</span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (part <span class="op">!==</span> <span class="st">""</span>) {</span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>                uniqueDataTagSet<span class="op">.</span><span class="fu">add</span>(part)<span class="op">;</span></span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="op">!</span>dataMap[part]) {</span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>                    dataMap[part] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>                dataMap[part]<span class="op">.</span><span class="fu">add</span>(name)<span class="op">;</span></span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>    literature<span class="op">.</span><span class="fu">forEach</span>((paper) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>      paperNames<span class="op">.</span><span class="fu">push</span>(paper[<span class="st">"Citation name"</span>])<span class="op">;</span></span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>      <span class="kw">var</span> parts <span class="op">=</span> paper[<span class="st">"Graph feature"</span>]<span class="op">.</span><span class="fu">split</span>(<span class="st">","</span>)<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> item<span class="op">.</span><span class="fu">trim</span>())</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">var</span> part <span class="kw">of</span> parts) {</span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (part <span class="op">!==</span> <span class="st">""</span>) {</span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>          uniquePaperTagSet<span class="op">.</span><span class="fu">add</span>(part)<span class="op">;</span></span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (part <span class="kw">in</span> tagMapping) {</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>              part <span class="op">=</span> tagMapping[part]</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="op">!</span>paperMap[part]) {</span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>              paperMap[part] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>          paperMap[part]<span class="op">.</span><span class="fu">add</span>(paper[<span class="st">"Citation name"</span>])<span class="op">;</span></span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Add keys not present in the paperTags </span></span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(dataMap)<span class="op">.</span><span class="fu">forEach</span>((key) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>paperMap[key]) {</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>        paperMap[key] <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> category_tags <span class="op">=</span> {</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span><span class="op">:</span> <span class="st">"Layered"</span><span class="op">,</span></span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>        <span class="dv">2</span><span class="op">:</span> <span class="st">"Hierarchical"</span><span class="op">,</span></span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4</span><span class="op">:</span> <span class="st">"Attributes"</span><span class="op">,</span></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>        <span class="dv">11</span><span class="op">:</span> <span class="st">"Structures"</span><span class="op">,</span></span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>        <span class="dv">21</span><span class="op">:</span> <span class="st">"Other"</span><span class="op">,</span></span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>    <span class="co">// if you change this ordering or move around values also change the category map above!!!</span></span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>    <span class="co">//var uniqueDataTags = [...uniqueDataTagSet]</span></span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniqueDataTags <span class="op">=</span> [</span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Layered</span></span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Bipartite"</span><span class="op">,</span></span>
+<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>        <span class="st">"N-layers"</span><span class="op">,</span></span>
+<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Hierarchical</span></span>
+<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Trees"</span><span class="op">,</span></span>
+<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Hierarchical"</span><span class="op">,</span></span>
+<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Attributes</span></span>
+<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Dynamic"</span><span class="op">,</span></span>
+<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Weighted edges"</span><span class="op">,</span></span>
+<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Weighted nodes"</span><span class="op">,</span></span>
+<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Labeled nodes"</span><span class="op">,</span></span>
+<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Categorical nodes"</span><span class="op">,</span></span>
+<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Signed"</span><span class="op">,</span></span>
+<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Spatial"</span><span class="op">,</span></span>
+<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Structures</span></span>
+<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Clusters (pre-existing)"</span><span class="op">,</span></span>
+<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Clusters (generated)"</span><span class="op">,</span></span>
+<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Directed edges"</span><span class="op">,</span></span>
+<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Hypergraphs"</span><span class="op">,</span></span>
+<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Bundled edges (generated)"</span><span class="op">,</span></span>
+<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Partition"</span><span class="op">,</span></span>
+<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Multigraph"</span><span class="op">,</span></span>
+<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Acyclic"</span><span class="op">,</span></span>
+<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mesh"</span><span class="op">,</span></span>
+<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Other</span></span>
+<span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Generic"</span><span class="op">,</span></span>
+<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Planar"</span><span class="op">,</span></span>
+<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Nonplanar"</span><span class="op">,</span></span>
+<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Known crossing number"</span><span class="op">,</span></span>
+<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Large"</span><span class="op">,</span></span>
+<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Dense"</span><span class="op">,</span></span>
+<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Sparse"</span><span class="op">,</span></span>
+<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> uniquePaperTags <span class="op">=</span> [<span class="op">...</span>uniquePaperTagSet]  </span>
+<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(uniqueDataTags)</span></span>
+<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(uniquePaperTagSet)</span></span>
+<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(dataMap)</span></span>
+<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(paperMap)</span></span>
+<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(dataSetNames)</span></span>
+<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>    <span class="co">//console.log(paperNames)</span></span>
+<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a>    <span class="co">// remove empty entries</span></span>
+<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a>    paperNames <span class="op">=</span> paperNames<span class="op">.</span><span class="fu">filter</span>(str <span class="kw">=&gt;</span> str<span class="op">.</span><span class="fu">trim</span>() <span class="op">!==</span> <span class="st">""</span>)</span>
+<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a>    <span class="co">// remove empty entries</span></span>
-<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>    paperNames <span class="op">=</span> paperNames<span class="op">.</span><span class="fu">filter</span>(str <span class="kw">=&gt;</span> str<span class="op">.</span><span class="fu">trim</span>() <span class="op">!==</span> <span class="st">""</span>)</span>
-<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> checkBoxContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'checkbox-container'</span>)<span class="op">;</span></span>
-<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> linksListContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'datasetlinkslist-container'</span>)</span>
-<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperLinksContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'paperlinkslist-container'</span>)</span>
-<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> checkboxStates <span class="op">=</span> []<span class="op">;</span>  <span class="co">// Array to keep track of checkbox states (booleans)</span></span>
+<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> checkBoxContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'checkbox-container'</span>)<span class="op">;</span></span>
+<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> linksListContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'datasetlinkslist-container'</span>)</span>
+<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> paperLinksContainer <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'paperlinkslist-container'</span>)</span>
+<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> checkboxStates <span class="op">=</span> []<span class="op">;</span>  <span class="co">// Array to keep track of checkbox states (booleans)</span></span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a>    <span class="co">// needs to be in here since we access so many "global" variables</span></span>
+<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">displayDataSetLinksList</span>() {</span>
+<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log(checkboxStates); // current states to check which dataset links to display (index-based)</span></span>
 <span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a>    <span class="co">// needs to be in here since we access so many "global" variables</span></span>
-<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">displayDataSetLinksList</span>() {</span>
-<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log(checkboxStates); // current states to check which dataset links to display (index-based)</span></span>
-<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> filteredTags <span class="op">=</span> uniqueDataTags<span class="op">.</span><span class="fu">map</span>((item<span class="op">,</span> index) <span class="kw">=&gt;</span> checkboxStates[index] <span class="op">?</span> item <span class="op">:</span> <span class="kw">undefined</span>)</span>
-<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">filter</span>(item <span class="kw">=&gt;</span> item <span class="op">!==</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
-<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log(filteredTags)</span></span>
-<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_datasets <span class="op">=</span> []</span>
-<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_data_inverse <span class="op">=</span> []</span>
-<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_papers <span class="op">=</span> []</span>
-<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_paper_inverse <span class="op">=</span> []</span>
-<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (filteredTags<span class="op">.</span><span class="at">length</span> <span class="op">==</span> <span class="dv">0</span>) {</span>
-<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>            final_datasets <span class="op">=</span> dataSetNames<span class="op">;</span></span>
-<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>            final_papers <span class="op">=</span> paperNames<span class="op">;</span></span>
-<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Retrieve an array of sets from the provided keys</span></span>
-<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataSets <span class="op">=</span> filteredTags<span class="op">.</span><span class="fu">map</span>(key <span class="kw">=&gt;</span> dataMap[key])<span class="op">;</span></span>
-<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperSets <span class="op">=</span> filteredTags<span class="op">.</span><span class="fu">map</span>(key <span class="kw">=&gt;</span> paperMap[key])<span class="op">;</span></span>
+<span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> filteredTags <span class="op">=</span> uniqueDataTags<span class="op">.</span><span class="fu">map</span>((item<span class="op">,</span> index) <span class="kw">=&gt;</span> checkboxStates[index] <span class="op">?</span> item <span class="op">:</span> <span class="kw">undefined</span>)</span>
+<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">filter</span>(item <span class="kw">=&gt;</span> item <span class="op">!==</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log(filteredTags)</span></span>
+<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_datasets <span class="op">=</span> []</span>
+<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_data_inverse <span class="op">=</span> []</span>
+<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_papers <span class="op">=</span> []</span>
+<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> final_paper_inverse <span class="op">=</span> []</span>
+<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (filteredTags<span class="op">.</span><span class="at">length</span> <span class="op">==</span> <span class="dv">0</span>) {</span>
+<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>            final_datasets <span class="op">=</span> dataSetNames<span class="op">;</span></span>
+<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>            final_papers <span class="op">=</span> paperNames<span class="op">;</span></span>
+<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Retrieve an array of sets from the provided keys</span></span>
+<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataSets <span class="op">=</span> filteredTags<span class="op">.</span><span class="fu">map</span>(key <span class="kw">=&gt;</span> dataMap[key])<span class="op">;</span></span>
+<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperSets <span class="op">=</span> filteredTags<span class="op">.</span><span class="fu">map</span>(key <span class="kw">=&gt;</span> paperMap[key])<span class="op">;</span></span>
+<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Calculate the intersection of all sets</span></span>
+<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataIntersection <span class="op">=</span> dataSets<span class="op">.</span><span class="fu">reduce</span>((acc<span class="op">,</span> <span class="kw">set</span>) <span class="kw">=&gt;</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>acc]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="kw">set</span><span class="op">.</span><span class="fu">has</span>(x))))<span class="op">;</span></span>
+<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperIntersection <span class="op">=</span> paperSets<span class="op">.</span><span class="fu">reduce</span>((acc<span class="op">,</span> <span class="kw">set</span>) <span class="kw">=&gt;</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>acc]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="kw">set</span><span class="op">.</span><span class="fu">has</span>(x))))<span class="op">;</span></span>
 <span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Calculate the intersection of all sets</span></span>
-<span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataIntersection <span class="op">=</span> dataSets<span class="op">.</span><span class="fu">reduce</span>((acc<span class="op">,</span> <span class="kw">set</span>) <span class="kw">=&gt;</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>acc]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="kw">set</span><span class="op">.</span><span class="fu">has</span>(x))))<span class="op">;</span></span>
-<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperIntersection <span class="op">=</span> paperSets<span class="op">.</span><span class="fu">reduce</span>((acc<span class="op">,</span> <span class="kw">set</span>) <span class="kw">=&gt;</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>acc]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="kw">set</span><span class="op">.</span><span class="fu">has</span>(x))))<span class="op">;</span></span>
-<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a>            final_datasets <span class="op">=</span> [<span class="op">...</span>dataIntersection] <span class="co">// white list</span></span>
-<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a>            final_papers <span class="op">=</span> [<span class="op">...</span>paperIntersection]</span>
+<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a>            final_datasets <span class="op">=</span> [<span class="op">...</span>dataIntersection] <span class="co">// white list</span></span>
+<span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a>            final_papers <span class="op">=</span> [<span class="op">...</span>paperIntersection]</span>
+<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Now, compute the difference between dataSetNames and final_datasets</span></span>
+<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataDifference <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(dataSetNames<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="op">!</span>final_datasets<span class="op">.</span><span class="fu">includes</span>(x)))<span class="op">;</span></span>
+<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperDifference <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(paperNames<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="op">!</span>final_papers<span class="op">.</span><span class="fu">includes</span>(x)))<span class="op">;</span></span>
 <span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Now, compute the difference between dataSetNames and final_datasets</span></span>
-<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dataDifference <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(dataSetNames<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="op">!</span>final_datasets<span class="op">.</span><span class="fu">includes</span>(x)))<span class="op">;</span></span>
-<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> paperDifference <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(paperNames<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="op">!</span>final_papers<span class="op">.</span><span class="fu">includes</span>(x)))<span class="op">;</span></span>
+<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>            final_data_inverse <span class="op">=</span> [<span class="op">...</span>dataDifference]<span class="op">;</span> <span class="co">// black list</span></span>
+<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a>            final_paper_inverse <span class="op">=</span> [<span class="op">...</span>paperDifference]</span>
+<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>        }</span>
 <span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>            final_data_inverse <span class="op">=</span> [<span class="op">...</span>dataDifference]<span class="op">;</span> <span class="co">// black list</span></span>
-<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>            final_paper_inverse <span class="op">=</span> [<span class="op">...</span>paperDifference]</span>
-<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log("show: " + final_datasets) // white list </span></span>
-<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log("show: " + final_papers)</span></span>
-<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>        final_datasets<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
-<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
-<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
-<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'block'</span><span class="op">;</span>  <span class="co">// Clear the display property to default ('block')</span></span>
-<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a>            } </span>
-<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a>        final_data_inverse<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
-<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
-<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
-<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'none'</span><span class="op">;</span>  <span class="co">// Hide the div</span></span>
-<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a>        final_papers<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
-<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
-<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
-<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'block'</span><span class="op">;</span>  <span class="co">// Clear the display property to default ('block')</span></span>
-<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a>        final_paper_inverse<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
-<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
-<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
-<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'none'</span><span class="op">;</span>  <span class="co">// Hide the div</span></span>
-<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a>      <span class="co">/*</span></span>
-<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a><span class="co">      // this is how the it ran earlier and it was used to generate the static html links above this</span></span>
-<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a><span class="co">      if (final_datasets.length == 0) {</span></span>
-<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a><span class="co">      // display message that no dataset contains all these tags</span></span>
-<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.innerHTML = '';</span></span>
-<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a><span class="co">      } else {</span></span>
-<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.innerHTML = '';</span></span>
-<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a><span class="co">      final_datasets.forEach((currDataName) =&gt; {</span></span>
-<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a><span class="co">      const anchor = document.createElement('a');</span></span>
-<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.href = '#' + currDataName</span></span>
-<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.classList.add('dataset-link')</span></span>
-<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.textContent = nameMap[currDataName]</span></span>
+<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log("show: " + final_datasets) // white list </span></span>
+<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>        <span class="co">//console.log("show: " + final_papers)</span></span>
+<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a>        final_datasets<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
+<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
+<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
+<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'block'</span><span class="op">;</span>  <span class="co">// Clear the display property to default ('block')</span></span>
+<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a>            } </span>
+<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a>        final_data_inverse<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
+<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
+<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
+<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'none'</span><span class="op">;</span>  <span class="co">// Hide the div</span></span>
+<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>        final_papers<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
+<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
+<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
+<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'block'</span><span class="op">;</span>  <span class="co">// Clear the display property to default ('block')</span></span>
+<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a>        final_paper_inverse<span class="op">.</span><span class="fu">forEach</span>((name) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a>            <span class="co">//console.log(name + '-link')</span></span>
+<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> currLinkDiv <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(name <span class="op">+</span> <span class="st">'-link'</span>)</span>
+<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (currLinkDiv <span class="op">!=</span> <span class="kw">null</span>) {</span>
+<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a>                currLinkDiv<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">'none'</span><span class="op">;</span>  <span class="co">// Hide the div</span></span>
+<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a>      <span class="co">/*</span></span>
+<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a><span class="co">      // this is how the it ran earlier and it was used to generate the static html links above this</span></span>
+<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
+<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a><span class="co">      if (final_datasets.length == 0) {</span></span>
+<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a><span class="co">      // display message that no dataset contains all these tags</span></span>
+<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.innerHTML = '';</span></span>
+<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a><span class="co">      } else {</span></span>
+<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
+<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.innerHTML = '';</span></span>
+<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
+<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a><span class="co">      final_datasets.forEach((currDataName) =&gt; {</span></span>
+<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a><span class="co">      const anchor = document.createElement('a');</span></span>
+<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.href = '#' + currDataName</span></span>
+<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.classList.add('dataset-link')</span></span>
+<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a><span class="co">      anchor.textContent = nameMap[currDataName]</span></span>
+<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
+<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a><span class="co">      const div = document.createElement('div');</span></span>
+<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a><span class="co">      div.id = currDataName + '-link'</span></span>
+<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a><span class="co">      div.appendChild(anchor);</span></span>
 <span id="cb1-525"><a href="#cb1-525" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a><span class="co">      const div = document.createElement('div');</span></span>
-<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a><span class="co">      div.id = currDataName + '-link'</span></span>
-<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a><span class="co">      div.appendChild(anchor);</span></span>
+<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.appendChild(div);</span></span>
+<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a><span class="co">      })</span></span>
+<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a><span class="co">      }</span></span>
 <span id="cb1-529"><a href="#cb1-529" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a><span class="co">      linksListContainer.appendChild(div);</span></span>
-<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a><span class="co">      })</span></span>
-<span id="cb1-532"><a href="#cb1-532" aria-hidden="true" tabindex="-1"></a><span class="co">      }</span></span>
-<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a><span class="co">      </span></span>
-<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a><span class="co">      // and here for the paper names</span></span>
-<span id="cb1-535"><a href="#cb1-535" aria-hidden="true" tabindex="-1"></a><span class="co">      paperNames = paperNames.filter(str =&gt; str.trim() !== "").sort();</span></span>
-<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a><span class="co">      paperNames.forEach((currPaperName) =&gt; {</span></span>
+<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a><span class="co">      // and here for the paper names</span></span>
+<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a><span class="co">      paperNames = paperNames.filter(str =&gt; str.trim() !== "").sort();</span></span>
+<span id="cb1-532"><a href="#cb1-532" aria-hidden="true" tabindex="-1"></a><span class="co">      paperNames.forEach((currPaperName) =&gt; {</span></span>
+<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a><span class="co">          const div = document.createElement('div');</span></span>
+<span id="cb1-535"><a href="#cb1-535" aria-hidden="true" tabindex="-1"></a><span class="co">          div.id = currPaperName + '-link'</span></span>
+<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a><span class="co">          div.textContent = `[@${currPaperName}]`</span></span>
 <span id="cb1-537"><a href="#cb1-537" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-538"><a href="#cb1-538" aria-hidden="true" tabindex="-1"></a><span class="co">          const div = document.createElement('div');</span></span>
-<span id="cb1-539"><a href="#cb1-539" aria-hidden="true" tabindex="-1"></a><span class="co">          div.id = currPaperName + '-link'</span></span>
-<span id="cb1-540"><a href="#cb1-540" aria-hidden="true" tabindex="-1"></a><span class="co">          div.textContent = `[@${currPaperName}]`</span></span>
-<span id="cb1-541"><a href="#cb1-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-542"><a href="#cb1-542" aria-hidden="true" tabindex="-1"></a><span class="co">          paperLinksContainer.appendChild(div);</span></span>
-<span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a><span class="co">      });*/</span></span>
-<span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Function to add a new checkbox with a styled span label</span></span>
-<span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">addCheckbox</span>(index<span class="op">,</span> name) {</span>
-<span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> newCheckbox <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'input'</span>)<span class="op">;</span></span>
-<span id="cb1-550"><a href="#cb1-550" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">type</span> <span class="op">=</span> <span class="st">'checkbox'</span><span class="op">;</span></span>
-<span id="cb1-551"><a href="#cb1-551" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">id</span> <span class="op">=</span> <span class="st">'checkbox'</span> <span class="op">+</span> index<span class="op">;</span></span>
-<span id="cb1-552"><a href="#cb1-552" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">marginRight</span> <span class="op">=</span> <span class="st">'8px'</span><span class="op">;</span> </span>
-<span id="cb1-553"><a href="#cb1-553" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="st">'form-check-input'</span>)<span class="op">;</span></span>
-<span id="cb1-554"><a href="#cb1-554" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-555"><a href="#cb1-555" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Creating the span that will act as a label</span></span>
-<span id="cb1-556"><a href="#cb1-556" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'span'</span>)<span class="op">;</span></span>
-<span id="cb1-557"><a href="#cb1-557" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="st">'pill-tag'</span>)<span class="op">;</span></span>
-<span id="cb1-558"><a href="#cb1-558" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="vs">`pill_color_</span><span class="sc">${</span><span class="fu">name_cleanup</span>(name)<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
-<span id="cb1-559"><a href="#cb1-559" aria-hidden="true" tabindex="-1"></a>      <span class="co">//span.style.backgroundColor = get_css_color_for_tag(name)</span></span>
-<span id="cb1-560"><a href="#cb1-560" aria-hidden="true" tabindex="-1"></a>      <span class="co">//span.style.backgroundColor = graph_feature_tags_colors[index % graph_feature_tags_colors.length];  </span></span>
-<span id="cb1-561"><a href="#cb1-561" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> name<span class="op">;</span></span>
-<span id="cb1-562"><a href="#cb1-562" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-563"><a href="#cb1-563" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> label <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'label'</span>)<span class="op">;</span></span>
-<span id="cb1-564"><a href="#cb1-564" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'d-flex align-items-center justify-content-start'</span><span class="op">;</span></span>
-<span id="cb1-565"><a href="#cb1-565" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">htmlFor</span> <span class="op">=</span> newCheckbox<span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
-<span id="cb1-566"><a href="#cb1-566" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">cursor</span> <span class="op">=</span> <span class="st">'pointer'</span><span class="op">;</span>  <span class="co">// Change the cursor to a pointer on hover</span></span>
-<span id="cb1-567"><a href="#cb1-567" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="fu">appendChild</span>(newCheckbox)<span class="op">;</span></span>
-<span id="cb1-568"><a href="#cb1-568" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="fu">appendChild</span>(span)<span class="op">;</span>  <span class="co">// Append the span to the label</span></span>
+<span id="cb1-538"><a href="#cb1-538" aria-hidden="true" tabindex="-1"></a><span class="co">          paperLinksContainer.appendChild(div);</span></span>
+<span id="cb1-539"><a href="#cb1-539" aria-hidden="true" tabindex="-1"></a><span class="co">      });*/</span></span>
+<span id="cb1-540"><a href="#cb1-540" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb1-541"><a href="#cb1-541" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-542"><a href="#cb1-542" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Function to add a new checkbox with a styled span label</span></span>
+<span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">addCheckbox</span>(index<span class="op">,</span> name) {</span>
+<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> newCheckbox <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'input'</span>)<span class="op">;</span></span>
+<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">type</span> <span class="op">=</span> <span class="st">'checkbox'</span><span class="op">;</span></span>
+<span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">id</span> <span class="op">=</span> <span class="st">'checkbox'</span> <span class="op">+</span> index<span class="op">;</span></span>
+<span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">marginRight</span> <span class="op">=</span> <span class="st">'8px'</span><span class="op">;</span> </span>
+<span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="st">'form-check-input'</span>)<span class="op">;</span></span>
+<span id="cb1-550"><a href="#cb1-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-551"><a href="#cb1-551" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Creating the span that will act as a label</span></span>
+<span id="cb1-552"><a href="#cb1-552" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'span'</span>)<span class="op">;</span></span>
+<span id="cb1-553"><a href="#cb1-553" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="st">'pill-tag'</span>)<span class="op">;</span></span>
+<span id="cb1-554"><a href="#cb1-554" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">add</span>(<span class="vs">`pill_color_</span><span class="sc">${</span><span class="fu">name_cleanup</span>(name)<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb1-555"><a href="#cb1-555" aria-hidden="true" tabindex="-1"></a>      <span class="co">//span.style.backgroundColor = get_css_color_for_tag(name)</span></span>
+<span id="cb1-556"><a href="#cb1-556" aria-hidden="true" tabindex="-1"></a>      <span class="co">//span.style.backgroundColor = graph_feature_tags_colors[index % graph_feature_tags_colors.length];  </span></span>
+<span id="cb1-557"><a href="#cb1-557" aria-hidden="true" tabindex="-1"></a>      span<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb1-558"><a href="#cb1-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-559"><a href="#cb1-559" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> label <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'label'</span>)<span class="op">;</span></span>
+<span id="cb1-560"><a href="#cb1-560" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'d-flex align-items-center justify-content-start'</span><span class="op">;</span></span>
+<span id="cb1-561"><a href="#cb1-561" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">htmlFor</span> <span class="op">=</span> newCheckbox<span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
+<span id="cb1-562"><a href="#cb1-562" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">cursor</span> <span class="op">=</span> <span class="st">'pointer'</span><span class="op">;</span>  <span class="co">// Change the cursor to a pointer on hover</span></span>
+<span id="cb1-563"><a href="#cb1-563" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="fu">appendChild</span>(newCheckbox)<span class="op">;</span></span>
+<span id="cb1-564"><a href="#cb1-564" aria-hidden="true" tabindex="-1"></a>      label<span class="op">.</span><span class="fu">appendChild</span>(span)<span class="op">;</span>  <span class="co">// Append the span to the label</span></span>
+<span id="cb1-565"><a href="#cb1-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-566"><a href="#cb1-566" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> div <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
+<span id="cb1-567"><a href="#cb1-567" aria-hidden="true" tabindex="-1"></a>      div<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'form-check d-flex align-items-center'</span><span class="op">;</span>  <span class="co">// Ensure the checkbox and label are aligned</span></span>
+<span id="cb1-568"><a href="#cb1-568" aria-hidden="true" tabindex="-1"></a>      div<span class="op">.</span><span class="fu">appendChild</span>(label)<span class="op">;</span></span>
 <span id="cb1-569"><a href="#cb1-569" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-570"><a href="#cb1-570" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> div <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
-<span id="cb1-571"><a href="#cb1-571" aria-hidden="true" tabindex="-1"></a>      div<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'form-check d-flex align-items-center'</span><span class="op">;</span>  <span class="co">// Ensure the checkbox and label are aligned</span></span>
-<span id="cb1-572"><a href="#cb1-572" aria-hidden="true" tabindex="-1"></a>      div<span class="op">.</span><span class="fu">appendChild</span>(label)<span class="op">;</span></span>
-<span id="cb1-573"><a href="#cb1-573" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-574"><a href="#cb1-574" aria-hidden="true" tabindex="-1"></a>      checkBoxContainer<span class="op">.</span><span class="fu">appendChild</span>(div)<span class="op">;</span></span>
-<span id="cb1-575"><a href="#cb1-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-576"><a href="#cb1-576" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Update state array and add event listener</span></span>
-<span id="cb1-577"><a href="#cb1-577" aria-hidden="true" tabindex="-1"></a>      checkboxStates<span class="op">.</span><span class="fu">push</span>(<span class="kw">false</span>)<span class="op">;</span></span>
-<span id="cb1-578"><a href="#cb1-578" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">'change'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb1-579"><a href="#cb1-579" aria-hidden="true" tabindex="-1"></a>          checkboxStates[index] <span class="op">=</span> newCheckbox<span class="op">.</span><span class="at">checked</span><span class="op">;</span></span>
-<span id="cb1-580"><a href="#cb1-580" aria-hidden="true" tabindex="-1"></a>          <span class="fu">displayDataSetLinksList</span>()</span>
-<span id="cb1-581"><a href="#cb1-581" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
-<span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Automatically add checkboxes on load for each tag, we cannot reorder after this!</span></span>
-<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a>  uniqueDataTags<span class="op">.</span><span class="fu">forEach</span>((entry<span class="op">,</span> index) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (category_tags<span class="op">.</span><span class="fu">hasOwnProperty</span>(index)) {</span>
-<span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'span'</span>)<span class="op">;</span></span>
-<span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a>          span<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">opacity</span> <span class="op">=</span> <span class="st">"50%"</span><span class="op">;</span>  <span class="co">// Setting it to be less obnoxious</span></span>
-<span id="cb1-589"><a href="#cb1-589" aria-hidden="true" tabindex="-1"></a>          span<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">"</span><span class="sc">\u2012</span><span class="st"> "</span> <span class="op">+</span> category_tags[index] <span class="op">+</span> <span class="st">"</span><span class="sc">\u2012</span><span class="st"> "</span><span class="op">;</span></span>
+<span id="cb1-570"><a href="#cb1-570" aria-hidden="true" tabindex="-1"></a>      checkBoxContainer<span class="op">.</span><span class="fu">appendChild</span>(div)<span class="op">;</span></span>
+<span id="cb1-571"><a href="#cb1-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-572"><a href="#cb1-572" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Update state array and add event listener</span></span>
+<span id="cb1-573"><a href="#cb1-573" aria-hidden="true" tabindex="-1"></a>      checkboxStates<span class="op">.</span><span class="fu">push</span>(<span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb1-574"><a href="#cb1-574" aria-hidden="true" tabindex="-1"></a>      newCheckbox<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">'change'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1-575"><a href="#cb1-575" aria-hidden="true" tabindex="-1"></a>          checkboxStates[index] <span class="op">=</span> newCheckbox<span class="op">.</span><span class="at">checked</span><span class="op">;</span></span>
+<span id="cb1-576"><a href="#cb1-576" aria-hidden="true" tabindex="-1"></a>          <span class="fu">displayDataSetLinksList</span>()</span>
+<span id="cb1-577"><a href="#cb1-577" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb1-578"><a href="#cb1-578" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-579"><a href="#cb1-579" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-580"><a href="#cb1-580" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Automatically add checkboxes on load for each tag, we cannot reorder after this!</span></span>
+<span id="cb1-581"><a href="#cb1-581" aria-hidden="true" tabindex="-1"></a>  uniqueDataTags<span class="op">.</span><span class="fu">forEach</span>((entry<span class="op">,</span> index) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (category_tags<span class="op">.</span><span class="fu">hasOwnProperty</span>(index)) {</span>
+<span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'span'</span>)<span class="op">;</span></span>
+<span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a>          span<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">opacity</span> <span class="op">=</span> <span class="st">"50%"</span><span class="op">;</span>  <span class="co">// Setting it to be less obnoxious</span></span>
+<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a>          span<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">"</span><span class="sc">\u2012</span><span class="st"> "</span> <span class="op">+</span> category_tags[index] <span class="op">+</span> <span class="st">"</span><span class="sc">\u2012</span><span class="st"> "</span><span class="op">;</span></span>
+<span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> div <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
+<span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a>          div<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'d-flex align-items-center'</span><span class="op">;</span>  </span>
+<span id="cb1-589"><a href="#cb1-589" aria-hidden="true" tabindex="-1"></a>          div<span class="op">.</span><span class="fu">appendChild</span>(span)<span class="op">;</span></span>
 <span id="cb1-590"><a href="#cb1-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> div <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
-<span id="cb1-592"><a href="#cb1-592" aria-hidden="true" tabindex="-1"></a>          div<span class="op">.</span><span class="at">className</span> <span class="op">=</span> <span class="st">'d-flex align-items-center'</span><span class="op">;</span>  </span>
-<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a>          div<span class="op">.</span><span class="fu">appendChild</span>(span)<span class="op">;</span></span>
-<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a>          checkBoxContainer<span class="op">.</span><span class="fu">appendChild</span>(div)<span class="op">;</span></span>
-<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>      <span class="fu">addCheckbox</span>(index<span class="op">,</span> entry)<span class="op">;</span></span>
-<span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a>  <span class="co">// initial call to display all datasets (now a bit redundant but adds the "display" style-attribute)</span></span>
-<span id="cb1-601"><a href="#cb1-601" aria-hidden="true" tabindex="-1"></a>  <span class="fu">displayDataSetLinksList</span>()</span>
-<span id="cb1-602"><a href="#cb1-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-603"><a href="#cb1-603" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a>          checkBoxContainer<span class="op">.</span><span class="fu">appendChild</span>(div)<span class="op">;</span></span>
+<span id="cb1-592"><a href="#cb1-592" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a>      <span class="fu">addCheckbox</span>(index<span class="op">,</span> entry)<span class="op">;</span></span>
+<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a>  <span class="co">// initial call to display all datasets (now a bit redundant but adds the "display" style-attribute)</span></span>
+<span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>  <span class="fu">displayDataSetLinksList</span>()</span>
+<span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display hidden">
 <div id="ojs-cell-1" data-nodetype="expression">
 
