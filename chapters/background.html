@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.4.554">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>background – GD benchmark sets</title>
+<title>GD benchmark sets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -94,29 +94,11 @@ ul.task-list li input[type="checkbox"] {
 <section id="motivation-and-background" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Motivation and Background</h1>
 <p>This work stems from the challenges we encountered in finding datasets tailored to test graph layout algorithms. When developing a graph layout algorithm which handles specific features (such as layers, or clusters), it is essential to have a benchmark dataset that reflects these features. While conducting our own evaluations, we found it difficult to find datasets that would incorporate features that we needed. This submission is part of an ongoing effort to keep a curated list of datasets.</p>
-<p><!-- This is further discussed in @sec-related-work. --> Our work focuses on providing a graph benchmark collection that categorizes datasets by how they organize their graphs and emphasizes their features. We aim to facilitate researchers’ choice of benchmarks to reflect real use cases or allow comparisons to other algorithms in their respective fields. Although a number of graph repositories exist, their target and objectives are not always aligned with the needs of graph drawing researchers. While the scope of this work revolves around compiling graphs and networks used in the graph drawing literature, we highlight that other, adjacent fields have also created similar <strong>repositories tailored to different needs</strong>. For example, the <a href="#Network_Repository" class="dataset-link">Network Repository</a> consists of a comprehensive collection of datasets that contain many attributes and are used for benchmarking in machine learning, data mining, and many other network applications <span class="citation" data-cites="nr">[@nr]</span>. In biology, the <a href="#Biological_Pathways_KEGG" class="dataset-link">KEGG Encyclopedia of Genes and Genomes</a> contains network information relevant to biological pathways <span class="citation" data-cites="kegg">[@kegg]</span>. Some general-purpose collections used in network science are also relevant to our discussion. Among the most famous ones, the <a href="#SuiteSparse_Matrix_Collection" class="dataset-link">SuiteSparse Matrix Collection</a>, the <a href="#SNAP" class="dataset-link">Stanford Network Analysis Project (SNAP)</a>, and the <a href="#Pajek" class="dataset-link">Pajek</a> collection stand out since they propose large compilations of datasets that often come from diverse sources. The <a href="https://ogb.stanford.edu/">Open Graph Benchmark</a> collection from <span class="citation" data-cites="hu2020">@hu2020</span> is also worth mentioning, but it is made specifically for training machine learning models, which is not the focus of our work. Much simpler examples of similar collections can be found in curated lists of links on GitHub, often referred to as <em>awesome</em> lists, where a short comment usually accompanies every entry (for instance, <a href="https://github.com/gzcsudo/Awesome-Hypergraph-Network">here</a> and <a href="https://github.com/domargan/awesome-dynamic-graphs">here</a>). The purpose and scope of such repositories is provided with more depth in <strong>?@sec-established-network-repositories</strong>.</p>
+<p>Our work focuses on providing a graph benchmark collection that categorizes datasets by how they organize their graphs and emphasizes their features. We aim to facilitate researchers’ choice of benchmarks to reflect real use cases or allow comparisons to other algorithms in their respective fields. Although a number of graph repositories exist, their target and objectives are not always aligned with the needs of graph drawing researchers. While the scope of this work revolves around compiling graphs and networks used in the graph drawing literature, we highlight that other, adjacent fields have also created similar <strong>repositories tailored to different needs</strong>. For example, the <a href="#Network_Repository" class="dataset-link">Network Repository</a> consists of a comprehensive collection of datasets that contain many attributes and are used for benchmarking in machine learning, data mining, and many other network applications <span class="citation" data-cites="nr">[@nr]</span>. In biology, the <a href="#Biological_Pathways_KEGG" class="dataset-link">KEGG Encyclopedia of Genes and Genomes</a> contains network information relevant to biological pathways <span class="citation" data-cites="kegg">[@kegg]</span>. Some general-purpose collections used in network science are also relevant to our discussion. Among the most famous ones, the <a href="#SuiteSparse_Matrix_Collection" class="dataset-link">SuiteSparse Matrix Collection</a>, the <a href="#SNAP" class="dataset-link">Stanford Network Analysis Project (SNAP)</a>, and the <a href="#Pajek" class="dataset-link">Pajek</a> collection stand out since they propose large compilations of datasets that often come from diverse sources. The <a href="https://ogb.stanford.edu/">Open Graph Benchmark</a> collection from <span class="citation" data-cites="hu2020">@hu2020</span> is also worth mentioning, but it is made specifically for training machine learning models, which is not the focus of our work. Much simpler examples of similar collections can be found in curated lists of links on GitHub, often referred to as <em>awesome</em> lists, where a short comment usually accompanies every entry (for instance, <a href="https://github.com/gzcsudo/Awesome-Hypergraph-Network">here</a> and <a href="https://github.com/domargan/awesome-dynamic-graphs">here</a>). The purpose and scope of such repositories is provided with more depth in <strong>?@sec-established-network-repositories</strong>.</p>
 <p>Such lists can serve as great tools to find particular case studies, but they do not serve the same purpose as a <strong>uniform collection</strong> like <a href="#Rome-Lib" class="dataset-link">Rome-Lib</a>: a collection of graphs with similar features that can be used to test an algorithm on thousands of graphs with increasing nodes. Rome-Lib is hosted on the main website of the Graph Drawing website, as proof of its usefulness as a benchmark dataset, together with the AT&amp;T graphs and the random DAGs. Another example is the Graph Partitioning Archive, also known as the <a href="#Walshaw" class="dataset-link">Walshaw</a> Collection, which compiles relevant graphs and partitioning algorithms from disparate sources in the relevant literature <span class="citation" data-cites="walshaw2000">[@walshaw2000]</span>. The uniformity of such collections allows scientists to easily run thousand of tests on similar graphs, allowing to test the scalability of an algorithm varying density, number of nodes and number of edges — as opposed to the previously mentioned collections, where the focus is on the diversity of the graphs. See <strong>?@sec-uniform-benchmark-datasets</strong> for more information on this topic.</p>
-<!-- This work stemmed from our need to find datasets tailored to test graph layout algorithms for graphs with specific features. -->
-<!-- While many extant graph databases exist across various archives, we found ourselves seeking datasets used for algorithms in the graph drawing and network visualization literature, including information about their transformations and usage.
-For instance, some layered graph drawing papers mention imposing layers on non-layered graphs for their evaluations [cite].
-Therefore, different evaluations using different implementations of the layering may have different graphs despite using the same underlying dataset. 
-Similarly, we also wanted to find real-world datasets for case studies, which might not be accurate using a synthetic layering of non-layered graphs. 
-While our work focused on layered graphs, similar datasets are used in many graph layout domains, like edge bundling [cite], crossing number reduction [], and graph partitioning problems [cite]. 
-Therefore, our work focuses on providing a graph benchmark collection that categorizes datasets by how they organize their graphs and emphasizes their features (e.g., ranging sizes for testing scalability).
-We aim to facilitate researchers' choice of benchmarks to reflect real use cases or allow comparisons to other algorithms in their respective fields. 
-We also summarize the graphs to help users overview the dataset before downloading.
-This summary also includes some analysis to provide overarching quantitative graph information, such as node and edge distribution, which is relevant for problems involving graph sparsity.  -->
 <p>We care particularly about the <strong>reproducibility</strong> of past and future research. A dataset that has been used in an evaluation and is now unaccessible greatly hinders the reproducibility of the evaluation, and in the worst case it makes it impossible to reproduce, and, as such, much less meaningful. Losing a dataset to link rot is an unfortunately common problem in the digital age, as URLs change, websites go down, and data is lost. One example of this is the <a href="https://www.open-graph-archive.org/">Open Graph Archive</a> from <span class="citation" data-cites="bachmaier2012">@bachmaier2012</span>, which was a project to create a graph database that categorizes, analyses, and visualizes graphs uploaded from the community, a laudable effort now rendered unfortunately inaccessible. At the time of writing, the popular repository <a href="http://konect.cc/">Konect</a> is also unavailable and only accessible through the webarchive, although all the links to it in previous papers are now broken. Several other instances are discussed in <strong>?@sec-lost</strong>.</p>
 <p>We tried to mitigate the problem of lost datasets by still documenting what we could find about them. For every dataset that we found that is now lost or inaccessible, we documented every detail we could find about it in literature, including descriptions and pictures of the rendered graphs, so that we can conserve a hint of what the dataset contained. We also went through a process of reaching out to authors and looking into internal storages of research groups (those that were available to us) to find datasets that were not available online. In a couple of cases, this led to successfull outcomes: see <a href="#Storylines_Movie_Plots" class="dataset-link">Storylines (Movie Plots)</a>.</p>
 <p>We store our collection on the <a href="https://osf.io/">Open Science Framework (OSF)</a>, which is the currently recommended solution in the VIS community for long-term archival of research data. As per <a href="https://help.osf.io/article/547-account-and-security-faq-s#Backup">OSF’s backup and preservation policy</a>, storage and open access is guaranteed for the next 50 years.</p>
-<!-- Beyond finding relevant datasets for comparison and consistency with real-case scenarios, another priority that impulsed this work was the **reproducibility** of past and future research.  -->
-<!-- A dataset that has been used in an evaluation and is now unaccessible greatly hinders its reproducibility. -->
-<!-- In the worst case, it makes it impossible to reproduce and, as such, much less meaningful.  -->
-<!-- In this context, it is also worth mentioning that in recent years, several initiatives have been aimed at encouraging care for replicability in research.
-One such example is the graphics replicability stamp [https://www.replicabilitystamp.org/], which endorses the replicability of the results presented in a paper and ensures its replicability through an additional review process. 
-Another similar initiative is the ACM badges [https://www.acm.org/publications/policies/artifact-review-and-badging-current], or the SIGMOD availability and reproducibility initiative, which goes one step further and publishes full reports commenting on how reproducible a paper is. 
-Because our work aims to maintain a useful repository of graph datasets, we encourage anyone who may want to correct, integrate, or replace information to contact us. Authors are also welcome to submit a pull request to the following GitHub repository [link-git-hub].
-Similarly, we host our work on the Open Science Framework (OSF), which contains a snapshot of the data and the code for formatting, collecting,  and re-creating data when applicable. -->
 <p>In this context, it is also worth mentioning that in recent years there have been several initiatives aimed at encouraging care for replicability in research. The <a href="https://www.replicabilitystamp.org/">Graphics Replicability Stamp</a> is one of these, meant to be an endorsement of the replicability of the results presented in a paper, which ensures the replicability of the results of a paper through an additional review process. Another similar intiative are the <a href="https://www.acm.org/publications/policies/artifact-review-and-badging-current">ACM badges</a>, or the <a href="https://reproducibility.sigmod.org/">SIGMOD availability and reproducibility initiative</a>, which goes one step further and publishes full reports commenting on how reproducible a paper is.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -129,25 +111,6 @@ Similarly, we host our work on the Open Science Framework (OSF), which contains 
 </div>
 </div>
 <p>This work proposes an overarching taxonomy of datasets and collections based on their structure while also providing a higher emphasis on the features and usage within the literature of our field. Our collection is offered as a complement to the previously mentioned collections, as we intend to aid researchers in finding graphs in the context of layout algorithms and network visualization, with an accent on encouraging efforts towards replicability.</p>
-<!-- # Related Work {#sec-related-work} -->
-<!-- While the list of network datasets could be vastly expanded, this paper limits itself to listing only the datasets that are explicitly cited in our corpus of 196 papers. -->
-<!-- In section [Large collections], we discuss these and several others in more detail and offer links to their sites. We also provide examples from our survey of how those graphs are used to evaluate graph layout algorithms.  -->
-<!-- We discuss some of these in further detail as well in section [Sec: Uniform]. -->
-<!-- The Graph Drawing organization hosts three primary data sets used significantly in the field: the AT&T graphs, the Rome graphs, and randomly generated directed acyclic graphs [cite]. -->
-<!-- Besides, while the collections above offer insights into the properties and features of the graphs (see KONECT), the insights offered are not explicitly tailored to graph layout algorithms. -->
-<!-- Several other efforts have been made to compile similar benchmarks within graph drawing and other graph problems.  -->
-<!-- Although we do include a discussion on the content of these collections, we believe they can cover a different purpose than the one we present above.  -->
-<!-- Similarly, Bachmeier et al. proposed the Open Graph Archive in 2011 as an effort to create a graph database that categorizes, analyses, and visualizes graphs uploaded from the community [cite].
-Their work consisted of a similarly developed web-based interface that allows graphs to be exported in several formats. 
-They also included graphs across various large collections like the SuiteSparse Matrix Collection (formerly known as Florida in their paper).
-While this work is valuable, the project is discontinued, and the URLs to the site are broken as of this paper's writing. 
-Hence, we emphasize our work with OSF for the longer posterity of the graph base we collect, independent of the health of our proposed web interface. -->
-<!-- Kennedy et al. highlight some of the importance of tools to help researchers choose appropriate benchmarks in network sciences and graph drawing [].
-Therefore, they proposed The Graph Landscape, a visual system with several views and graph metrics to compare across graphs from various bases like the Rome library. 
-While our work does not focus on the same extensive metrics they do, our base still provides visual examples of graph usage and summary statistics per dataset. 
-They also propose a visual system and prototype that could be conceptually used with the collections we compile. 
-A major emphasis of our work was to provide several file formats to facilitate the use of other tools and allow researchers greater ease of use.  -->
-<!-- Our intention with this paper is to create a network repository of graph collections tailored explicitly for evaluating graph layout algorithms. This is provided by linking collections to graph features present in the datasets (dynamic, layered, containing clusters, etc.), providing analysis and examples of usage in previous research to aid in discovering and finding relevant datasets. -->
 
 
 </section>
@@ -188,7 +151,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -220,29 +194,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/VisDunneRight\.github\.io\/jovi-benchmark-sets\/");
@@ -250,7 +202,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
